@@ -1,15 +1,35 @@
 import socket
+from tqdm import tqdm
 
-ip = input("Enter the target: ")
-ports = [20, 21, 22, 23, 24, 25, 26, 80, 110, 111, 123, 443, 993, 994, 3306]
+ip = input("Digite o IP/URL do alvo: ")
+ports_open = []
 
-for port in ports:
+# MUDE O VALOR DE 'range' PARA O VALOR DE PORTAS DESEJADO PARA ESCANEAR
+for port in tqdm(range(100)):
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.settimeout(0.4)
     result = s.connect_ex((ip, port))
     if result == 0:
-        print(f"{port} =====>>>>> [OPEN!]")
-    else:
-        print(f"{port} CLOSED!")
+        ports_open.append(port)
     s.close()
-    print("")
+
+size = len(ports_open)
+i=0
+while i == 0:
+    op = input("\nDeseja ver a lista de portas abertas? y/n \n$ ")
+    op.lower()
+    
+    if op == 'y':
+        i+=1
+        print(f"\n{size} portas abertas")
+        print('-----------------')
+        for port in ports_open:
+            print(f'{port} open/aberta')
+    
+    elif op == 'n':
+        i+=1
+        print("\nOk.\n")
+    
+    else:
+        i+=0
+        print("\nResposta inválida. Tente novamente.\n")
